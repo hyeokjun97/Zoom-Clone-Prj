@@ -1,1 +1,2 @@
-alert("Hidsads");
+
+const socket = new WebSocket(`ws://${window.location.host}`);

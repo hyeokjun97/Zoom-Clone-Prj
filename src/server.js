@@ -20,13 +20,20 @@ const wss = new WebSocket.Server({server});
 //starting http and websocket in same server
 //two protocols, http and ws.
 
-function handleConnection(socket){
-    console.log(socket)
-}
+
+
+wss.on("connection", (socket) =>{
+    console.log("connected to server");
+    socket.on("close", ()=> console.log("Disconnected from the Browser"));
+    socket.on("message", (message)=>{
+        console.log(message.toString('utf8'));
+    });
+    socket.send("Hello");
+    
+});
 //"on" method waits "connection" to happens
 //on also recieves func called when connection happens
 //on gives info about connection through socket. <- is connection
-wss.on("connection", handleConnection);
 
 server.listen(3000, handleListen);
 

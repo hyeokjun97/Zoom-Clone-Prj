@@ -25,10 +25,10 @@ const sockets = [];
 
 wss.on("connection", (socket) =>{
     sockets.push(socket);
-    console.log("connected to server");
-    socket.on("close", ()=> console.log("Disconnected from the Browser"));
+    console.log("Connected to server✅");
+    socket.on("close", ()=> console.log("Disconnected from the Browser❌"));
     socket.on("message", (message)=>{
-        socket.forEach((aSocket) => aSocket.send(message.toString('utf8')));
+        sockets.forEach((aSocket) => aSocket.send(message.toString('utf8')));
     });
 });
 //"on" method waits "connection" to happens

@@ -1,24 +1,41 @@
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
+const messageForm = document.querySelector("#message");
+const nickForm = document.querySelector("#nickname");
 
 const socket = new WebSocket(`ws://${window.location.host}`);
 
+function makeMessage(type, payload){
+    const msg = {type, payload};
+    return JSON.stringify(msg);
+}
+
 socket.addEventListener("open", () =>{
-    console.log("connected to server");
+    console.log("Connected to server ✅");
 });
 
 socket.addEventListener("message", (message)=>{
-    console.log("New Message: ", message.data);
+    const li = document.createElement("li");
+    li.innerText = message.data;
+    messageList.append(li);
+    
 });
 
 socket.addEventListener("close", ()=>{
-    console.log("Disconnected From Server");
+    console.log("Disconnected From Server ❌");
 });
 
 function handleSubmit(event){
     event.preventDefault();
     const input = messageForm.querySelector("input");
-    socket.send(input.value);
+    socket.send(makeMessage("new_message", input.value));
     input.value = "";
-};
+}
+function handleNickSubmit(event){
+    event.preventDefault();
+    const input = nickForm.querySelector("input");
+    socket.send(makeMessage("nickname", input.value));
+}
+
 messageForm.addEventListener("submit", handleSubmit);
+
+nickForm.addEventListener("submit", handleNickSubmit);

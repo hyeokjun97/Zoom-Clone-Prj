@@ -20,16 +20,16 @@ const wss = new WebSocket.Server({server});
 //starting http and websocket in same server
 //two protocols, http and ws.
 
-
+//fake database
+const sockets = [];
 
 wss.on("connection", (socket) =>{
+    sockets.push(socket);
     console.log("connected to server");
     socket.on("close", ()=> console.log("Disconnected from the Browser"));
     socket.on("message", (message)=>{
-        console.log(message.toString('utf8'));
+        socket.forEach((aSocket) => aSocket.send(message.toString('utf8')));
     });
-    socket.send("Hello");
-    
 });
 //"on" method waits "connection" to happens
 //on also recieves func called when connection happens

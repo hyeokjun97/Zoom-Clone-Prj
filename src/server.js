@@ -1,7 +1,8 @@
 import http from "http";
-import WebSocket from "ws";
-
+//import WebSocket from "ws";
+import SocketIO from "socket.io";
 import express from "express";
+
 
 const app = express();
 
@@ -12,16 +13,24 @@ app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res)=>res.redirect("/"));
 
 
+
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
+
+wsServer.on("connection", (socket)=>{
+    console.log(socket);
+});
+
+
 const handleListen = () => console.log(`Listening on http://localhost:3000`);
+httpServer.listen(3000, handleListen);
 
-
-const server = http.createServer(app);
-const wss = new WebSocket.Server({server});
+//const wss = new WebSocket.Server({server});
 //starting http and websocket in same server
 //two protocols, http and ws.
 
 //fake database
-const sockets = [];
+/*const sockets = [];
 
 wss.on("connection", (socket) =>{
     sockets.push(socket);
@@ -47,4 +56,5 @@ wss.on("connection", (socket) =>{
 server.listen(3000, handleListen);
 
 
-//app.listen(3000);
+
+*/
